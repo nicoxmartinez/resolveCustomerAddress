@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  laravel_sqlite:
+    image: coleifer/sqlite-web
+    container_name: customer_server
+    volumes:
+      # Mapea directamente el archivo local de Laravel al contenedor
+      - ./database/database.sqlite:/data/database.sqlite
+    ports:
+      - "5435:8080"
+    environment:
+      - SQLITE_DATABASE=database.sqlite
+      - SQLITE_USERNAME=customer
+      - SQLITE_PASSWORD=pass
+      - SQLITE_READ_ONLY=0
