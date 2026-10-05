@@ -11,26 +11,26 @@ bidireccional y permisos de lectura/escritura con un proyecto **Laravel**.
 
 ## Dar permisos de escritura a la carpeta y al archivo en tu sistema host
 
-``bash
+```bash
 sudo chown -R $USER:$USER database/
 chmod -R 777 database/ 
-``
+```
 
 ## Ejecuta Docker Compose 
 
-``bash
+```bash
 docker compose up -d
-``
+```
 
 El contenedor lee y escribe sobre el mismo archivo físico predefinido por laravel de SQLite alojado en el directorio database/.
 Cuando ejecuta Docker Compose con el mapeo del volumen, Docker no copia el archivo, sino que crea un "acceso directo" bidireccional (montaje bind), manteniendo de permisos de usuario.
 
 ## Ejecutar el contenedor en modo interactivo:
 
-``bash
+```bash
  docker exec -it customer_server sqlite3 database/
-``
-Tambien puedes administrar tu base de datos desde una interfaz web navegable: http://localhost:5435
+```
+Tambien puedes administrar tu base de datos desde una interfaz web navegable: ``http://localhost:5435``
 En tu archivo .env, puedes usar la constante database_path() indicando solo el nombre del archivo, o pasar la ruta absoluta hacia tu proyecto.
 Ejemplo: DB_DATABASE=/home/user/laravel-project/database/database.sqlite
 
