@@ -35,4 +35,7 @@ return [
         ],
     ],
 
+    'georef' => [
+        'url' => env('GEOREF_API_URL'),
+    ],
 ];

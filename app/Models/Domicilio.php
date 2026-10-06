@@ -12,6 +12,8 @@ class Domicilio extends Model
 
     protected $table = 'domicilio';
     protected $primaryKey = 'id_domicilio';
+    
+    public $timestamps = false;
 
     protected $fillable = [
         'calle',

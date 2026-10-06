@@ -1,3 +1,8 @@
+## Gestión de Clientes y Domicilios Georeferenciados
+
+Esta aplicación desarrollada en Laravel proporciona un servicio robusto para el alta, actualización y gestión de clientes y sus respectivos domicilios. 
+Incluye integración automática en tiempo real con el servicio gubernamental Georef API para resolver geolocalización y normalizar datos de direcciones.
+
 ## Entorno SQLite + Docker
 
 Este proyecto documenta la configuración paso a paso para levantar un servidor de base de datos 
@@ -33,8 +38,6 @@ Cuando ejecuta Docker Compose con el mapeo del volumen, Docker no copia el archi
 Tambien puedes administrar tu base de datos desde una interfaz web navegable: ``http://localhost:5435``
 En tu archivo .env, puedes usar la constante database_path() indicando solo el nombre del archivo, o pasar la ruta absoluta hacia tu proyecto.
 Ejemplo: DB_DATABASE=/home/user/laravel-project/database/database.sqlite
-
----
 
 ## Acerca de Laravel
 
