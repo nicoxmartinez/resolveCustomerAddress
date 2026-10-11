@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ClienteResource;
 use App\Models\Cliente;
 use App\Models\Domicilio;
+use App\Models\TipoCliente;
+use App\Models\TipoDocumento;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +22,18 @@ class ClienteController extends Controller
     {
         $clientes = Cliente::with(['tipoCliente', 'tipoDocumento', 'domicilio'])->get();
 
-        return ClienteResource::collection($clientes);
+        return view('search', compact('clientes'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $tiposCliente = TipoCliente::all();
+        $tiposDocumento = TipoDocumento::all();
+
+        return view('create', compact('tiposCliente', 'tiposDocumento'));
     }
 
     /**
