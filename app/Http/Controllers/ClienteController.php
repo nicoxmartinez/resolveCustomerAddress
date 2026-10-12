@@ -136,6 +136,18 @@ class ClienteController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $cliente = Cliente::with(['tipoCliente', 'tipoDocumento', 'domicilio'])->findOrFail($id);
+        $tiposCliente = TipoCliente::all();
+        $tiposDocumento = TipoDocumento::all();
+
+        return view('edit', compact('cliente', 'tiposCliente', 'tiposDocumento'));
+    }
+
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request): JsonResponse

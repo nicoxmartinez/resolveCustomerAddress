@@ -5,7 +5,7 @@
 <ul>
     @foreach($clientes as $cliente)
         <li>
-            {{ $cliente->nombre }} - {{ $cliente->tipoCliente->nombre ?? $cliente->tipoCliente->descripcion ?? 'Tipo ' . $cliente->tipo_cliente_id }} - {{ $cliente->tipoDocumento->nombre ?? $cliente->tipoDocumento->descripcion ?? 'Doc ' . $cliente->tipo_documento_id }} - {{ $cliente->documento }} - {{ $cliente->domicilio->calle }} {{ $cliente->domicilio->numero }}
+            <a href="{{ route('edit', $cliente->id_cliente) }}">{{ $cliente->nombre }}</a> - {{ $cliente->tipoCliente->nombre ?? $cliente->tipoCliente->descripcion ?? 'Tipo ' . $cliente->tipo_cliente_id }}- {{ $cliente->tipoDocumento->nombre ?? $cliente->tipoDocumento->codigo ?? 'Doc ' . $cliente->tipo_documento_id }} - {{ $cliente->documento }} - {{ $cliente->domicilio->calle }} {{ $cliente->domicilio->numero }} {{ $cliente->domicilio->localidad }} {{ $cliente->domicilio->provincia }}
         </li>
     @endforeach
 </ul>

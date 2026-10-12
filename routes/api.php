@@ -15,4 +15,4 @@ Route::get('/tipoDocumento/lista', TipoDocumentoController::class);
 Route::get('/cliente/lista', [ClienteController::class, 'index']);
 Route::get('/cliente/id/{id}', [ClienteController::class, 'show']);
 Route::post('/cliente/crear', [ClienteController::class, 'store'])->name('cliente.store');
-Route::put('/cliente/modificar', [ClienteController::class, 'update']);
+Route::put('/cliente/modificar', [ClienteController::class, 'update'])->name('cliente.update');
