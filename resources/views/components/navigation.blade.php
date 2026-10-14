@@ -1,6 +1,11 @@
 <nav>
+    <h1>{{ config('app.name', 'Customer') }}</h1>
     <ul>
-        <li><a href="{{route('search')}}">Buscar Cliente</a></li>
-        <li><a href="{{route('create')}}">Crear Cliente</a></li>
+        @auth
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit">Cerrar Sesión</button>
+            </form>
+        @endauth
     </ul>
 </nav>

@@ -16,7 +16,7 @@ use Illuminate\Validation\Rule;
 class ClienteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra la vista de búsqueda de clientes (Index).
      */
     public function index()
     {
@@ -26,7 +26,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Muestra el formulario para crear un nuevo recurso.
      */
     public function create()
     {
@@ -37,7 +37,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Almacena el recurso recién creado en el almacenamiento.
      */
     public function store(Request $request): JsonResponse
     {
@@ -124,7 +124,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Muestra el recurso especificado.
      */
     public function show(string $id): JsonResponse
     {
@@ -136,7 +136,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Muestra el formulario para editar el recurso especificado.
      */
     public function edit(string $id)
     {
@@ -148,7 +148,7 @@ class ClienteController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualiza el recurso especificado en el almacenamiento.
      */
     public function update(Request $request): JsonResponse
     {
@@ -245,10 +245,18 @@ class ClienteController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Elimina el recurso especificado del almacenamiento.
      */
     public function destroy(string $id)
     {
-        //
+        $cliente = Cliente::findOrFail($id);
+        $domicilioId = $cliente->id_domicilio;
+
+        DB::transaction(function () use ($cliente, $domicilioId) {
+            $cliente->delete();
+            Domicilio::where('id_domicilio', $domicilioId)->delete();
+        });
+
+        return response()->json(['message' => 'Cliente eliminado correctamente'], 200);
     }
 }

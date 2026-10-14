@@ -10,8 +10,10 @@ Route::get('/', function () {
 */
 
 Route::view('/', 'index')->name('index');
-Route::view('login', 'login')->name('login');
-Route::view('registro', 'register')->name('register');
-Route::get('buscar', [ClienteController::class, 'index'])->name('search');
-Route::get('crear', [ClienteController::class,'create'])->name('create');
-Route::get('editar/{id}', [ClienteController::class, 'edit'])->name('edit');
+Route::middleware('auth')->group(function () {
+    Route::get('buscar', [ClienteController::class, 'index'])->name('search');
+    Route::get('crear', [ClienteController::class,'create'])->name('create');
+    Route::get('editar/{id}', [ClienteController::class, 'edit'])->name('edit');
+});
+
+require __DIR__.'/auth.php';
