@@ -46,12 +46,12 @@
         <input type="number" name="domicilio[numero]" value="{{ old('domicilio.numero') }}"/><br/><br/>
         <label for="localidad">Localidad:</label><br/>
         <input type="text" name="domicilio[localidad]" value="{{ old('domicilio.localidad') }}"/><br/><br/>
-        <label for="barrio">Barrio:</label><br/>
-        <input type="text" name="domicilio[barrio]" value="{{ old('domicilio.barrio') }}"/><br/><br/>
+        <label for="partido">Partido:</label><br/>
+        <input type="text" name="domicilio[partido]" value="{{ old('domicilio.partido') }}"/><br/><br/>
         <label for="entre_calles">Entre Calles:</label><br/>
         <input type="text" name="domicilio[entre_calles]" value="{{ old('domicilio.entre_calles') }}"/><br/><br/>
-        <label for="cp">Código Postal:</label><br/>
-        <input type="text" name="domicilio[cp]" value="{{ old('domicilio.cp') }}"/><br/><br/>
+        <label for="codigo_postal">Código Postal:</label><br/>
+        <input type="text" name="domicilio[codigo_postal]" value="{{ old('domicilio.codigo_postal') }}"/><br/><br/>
         <label for="provincia">Provincia:</label><br/>
         <input type="text" name="domicilio[provincia]" value="{{ old('domicilio.provincia') }}"/><br/><br/>
         <label for="pais">País:</label><br/>

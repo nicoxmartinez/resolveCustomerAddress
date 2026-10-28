@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('calle');
             $table->integer('numero');
             $table->string('localidad');
-            $table->string('barrio')->nullable();
+            $table->string('partido')->nullable();
             $table->string('entre_calles')->nullable();
-            $table->string('cp')->nullable();
+            $table->string('codigo_postal')->nullable();
             $table->string('provincia');
             $table->string('pais');
             $table->decimal('latitud', 10, 8)->nullable();

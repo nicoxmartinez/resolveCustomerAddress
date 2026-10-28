@@ -49,10 +49,10 @@
         <input type="number" name="domicilio[numero]" value="{{ $cliente->domicilio->numero }}"><br/><br/>
         <label for="localidad">Localidad:</label><br/>
         <input type="text" name="domicilio[localidad]" value="{{ $cliente->domicilio->localidad }}"><br/><br/>
-        <label for="barrio">Barrio:</label><br/>
-        <input type="text" name="domicilio[barrio]" value="{{ $cliente->domicilio->barrio }}"><br/><br/>
-        <label for="cp">Código Postal:</label><br/>
-        <input type="text" id="cp" name="domicilio[cp]" value="{{ $cliente->domicilio->cp }}"><br/><br/>
+        <label for="partido">Partido:</label><br/>
+        <input type="text" name="domicilio[partido]" value="{{ $cliente->domicilio->partido }}"><br/><br/>
+        <label for="codigo_postal">Código Postal:</label><br/>
+        <input type="text" id="codigo_postal" name="domicilio[codigo_postal]" value="{{ $cliente->domicilio->codigo_postal }}"><br/><br/>
         <label for="entre_calles">Entre Calles:</label><br/>
         <input type="text" id="entre_calles" name="domicilio[entre_calles]" value="{{ $cliente->domicilio->entre_calles }}"><br/><br/>
         <label for="provincia">Provincia:</label><br/>

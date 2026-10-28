@@ -57,21 +57,24 @@ class ClienteController extends Controller
             'domicilio.localidad'    => 'required|string|max:255',
             'domicilio.provincia'    => 'required|string|max:255',
             'domicilio.pais'         => 'required|string|max:255',
-            'domicilio.barrio'       => 'nullable|string|max:255',
+            'domicilio.partido'      => 'nullable|string|max:255',
             'domicilio.entre_calles' => 'nullable|string|max:255',
-            'domicilio.cp'           => 'nullable|string|max:255',
+            'domicilio.codigo_postal'=> 'nullable|string|max:255',
         ]);
 
         $domicilioData = $datos['domicilio'];
-        $direccionString = $domicilioData['calle'] . ' ' . $domicilioData['numero'] . ' ' . $domicilioData['barrio'];
+        $direccionString = $domicilioData['calle'] . ' ' . $domicilioData['numero'] . ' ' . $domicilioData['localidad'];
 
         $queryParams = array_filter([
             'direccion'    => $direccionString,
-            'departamento' => $domicilioData['localidad'],
+            'departamento' => $domicilioData['partido'],
             'provincia'    => $domicilioData['provincia'],
         ]);
 
         $response = Http::get('https://apis.datos.gob.ar/georef/api/v2.0/direcciones', $queryParams);
+
+        // Muestra la URL completa de la solicitud
+        //echo "URL de la solicitud: " . $response->effectiveUri() . "\n"; 
 
         if ($response->failed()) {
             return response()->json([
@@ -83,22 +86,27 @@ class ClienteController extends Controller
         if (!empty($geoData['direcciones'])) {
             $primerResultado = $geoData['direcciones'][0];
 
-            $domicilioData['latitud'] = $primerResultado['ubicacion']['lat'] ?? null;
-            $domicilioData['longitud'] = $primerResultado['ubicacion']['lon'] ?? null;
-
-            if (empty($domicilioData['barrio'])) {
-                $barrio = $primerResultado['localidad']['nombre'] ?? null;
-                $domicilioData['barrio'] = "{$barrio}";
-            }
-
-            if (empty($domicilioData['entre_calles'])) {
-                $cruce1 = $primerResultado['calle_cruce_1']['nombre'] ?? null;
-                $cruce2 = $primerResultado['calle_cruce_2']['nombre'] ?? null;
-                if ($cruce1 && $cruce2) {
-                    $domicilioData['entre_calles'] = "{$cruce1} y {$cruce2}";
-                } elseif ($cruce1 || $cruce2) {
-                    $domicilioData['entre_calles'] = $cruce1 ?? $cruce2;
-                }
+            switch (true) {
+                case 'isset($primerResultado[calle])':
+                    $domicilioData['calle'] = $primerResultado['calle']['nombre'] ?? null;
+                case 'isset($primerResultado[localidad])':
+                    $domicilioData['localidad'] = $primerResultado['localidad']['nombre'] ?? null;
+                case 'isset($primerResultado[departamento])':
+                    $domicilioData['partido'] = $primerResultado['departamento']['nombre'] ?? null;
+                case 'isset($primerResultado[entre_calles])':
+                    $cruce1 = $primerResultado['calle_cruce_1']['nombre'] ?? null;
+                    $cruce2 = $primerResultado['calle_cruce_2']['nombre'] ?? null;
+                    if ($cruce1 && $cruce2) {
+                        $domicilioData['entre_calles'] = "{$cruce1} y {$cruce2}";
+                    } elseif ($cruce1 || $cruce2) {
+                        $domicilioData['entre_calles'] = $cruce1 ?? $cruce2;
+                    }
+                case 'isset($primerResultado[provincia])':
+                    $domicilioData['provincia'] = $primerResultado['provincia']['nombre'] ?? null;
+                case 'isset($primerResultado[latitud])':
+                    $domicilioData['latitud'] = $primerResultado['ubicacion']['lat'] ?? null;
+                case 'isset($primerResultado[longitud])':
+                    $domicilioData['longitud'] = $primerResultado['ubicacion']['lon'] ?? null;
             }
         } else {
             return response()->json([
@@ -164,7 +172,7 @@ class ClienteController extends Controller
             'documento'                        => [
                 'required',
                 'string',
-                Rule::unique('cliente', 'documento'),
+                Rule::unique('cliente', 'documento')->ignore($cliente->id_cliente, 'id_cliente'),
             ],
 
             // Validaciones de Domicilio
@@ -175,17 +183,17 @@ class ClienteController extends Controller
             'domicilio.localidad'    => 'required|string|max:255',
             'domicilio.provincia'    => 'required|string|max:255',
             'domicilio.pais'         => 'required|string|max:255',
-            'domicilio.barrio'       => 'nullable|string|max:255',
+            'domicilio.partido'      => 'nullable|string|max:255',
             'domicilio.entre_calles' => 'nullable|string|max:255',
-            'domicilio.cp'           => 'nullable|string|max:255',
+            'domicilio.codigo_postal' => 'nullable|string|max:255',
         ]);
 
         $domicilioData = $datos['domicilio'];
-        $direccionString = $domicilioData['calle'] . ' ' . $domicilioData['numero'] . ' ' . ($domicilioData['barrio'] ?? '');
+        $direccionString = $domicilioData['calle'] . ' ' . $domicilioData['numero'] . ' ' . ($domicilioData['partido'] ?? '');
 
         $queryParams = array_filter([
             'direccion'    => trim($direccionString),
-            'departamento' => $domicilioData['localidad'],
+            'departamento' => $domicilioData['partido'],
             'provincia'    => $domicilioData['provincia'],
         ]);
 
@@ -202,22 +210,27 @@ class ClienteController extends Controller
         if (!empty($geoData['direcciones'])) {
             $primerResultado = $geoData['direcciones'][0];
 
-            $domicilioData['latitud'] = $primerResultado['ubicacion']['lat'] ?? null;
-            $domicilioData['longitud'] = $primerResultado['ubicacion']['lon'] ?? null;
-
-            if (empty($domicilioData['barrio'])) {
-                $barrio = $primerResultado['localidad']['nombre'] ?? null;
-                $domicilioData['barrio'] = $barrio ? "{$barrio}" : null;
-            }
-
-            if (empty($domicilioData['entre_calles'])) {
-                $cruce1 = $primerResultado['calle_cruce_1']['nombre'] ?? null;
-                $cruce2 = $primerResultado['calle_cruce_2']['nombre'] ?? null;
-                if ($cruce1 && $cruce2) {
-                    $domicilioData['entre_calles'] = "{$cruce1} y {$cruce2}";
-                } elseif ($cruce1 || $cruce2) {
-                    $domicilioData['entre_calles'] = $cruce1 ?? $cruce2;
-                }
+            switch (true) {
+                case 'isset($primerResultado[calle])':
+                    $domicilioData['calle'] = $primerResultado['calle']['nombre'] ?? null;
+                case 'isset($primerResultado[localidad])':
+                    $domicilioData['localidad'] = $primerResultado['localidad']['nombre'] ?? null;
+                case 'isset($primerResultado[departamento])':
+                    $domicilioData['partido'] = $primerResultado['departamento']['nombre'] ?? null;
+                case 'isset($primerResultado[entre_calles])':
+                    $cruce1 = $primerResultado['calle_cruce_1']['nombre'] ?? null;
+                    $cruce2 = $primerResultado['calle_cruce_2']['nombre'] ?? null;
+                    if ($cruce1 && $cruce2) {
+                        $domicilioData['entre_calles'] = "{$cruce1} y {$cruce2}";
+                    } elseif ($cruce1 || $cruce2) {
+                        $domicilioData['entre_calles'] = $cruce1 ?? $cruce2;
+                    }
+                case 'isset($primerResultado[provincia])':
+                    $domicilioData['provincia'] = $primerResultado['provincia']['nombre'] ?? null;
+                case 'isset($primerResultado[latitud])':
+                    $domicilioData['latitud'] = $primerResultado['ubicacion']['lat'] ?? null;
+                case 'isset($primerResultado[longitud])':
+                    $domicilioData['longitud'] = $primerResultado['ubicacion']['lon'] ?? null;
             }
         } else {
             return response()->json([
@@ -258,5 +271,19 @@ class ClienteController extends Controller
         });
 
         return response()->json(['message' => 'Cliente eliminado correctamente'], 200);
+    }
+
+    /**
+     * Obtiene un cliente por su número de documento.
+     */
+    public function getClienteByDocumento(string $documento): JsonResponse
+    {
+        $data = Cliente::with(['tipoCliente', 'tipoDocumento', 'domicilio'])
+            ->where('documento', $documento)
+            ->firstOrFail();
+
+        $cliente = new ClienteResource($data);
+
+        return response()->json($cliente, 200);
     }
 }
